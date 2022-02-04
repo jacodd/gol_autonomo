@@ -1,0 +1,38 @@
+<launch>
+
+  <arg name="model" default="$(find carro)/urdf/gol.urdf"/>
+  <arg name="gui" default="true" />
+  <arg name="rvizconfig" default="$(find carro)/rviz/urdf.rviz" />
+
+  <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
+  <param name="use_gui" value="$(arg gui)"/>
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+<!-- Run depth to pointcloud -->
+<node pkg="nodelet" type="nodelet" name="pc_manager" args="manager" />
+
+  <node pkg="nodelet" type="nodelet" name="d2p" args="load depth_image_proc/point_cloud_xyzrgb pc_manager">
+    <remap from="/rgb/camera_info" to="/camera/camera_info"/>
+    <remap from="/rgb/image_rect_color" to="/camera/color"/>
+    <remap from="/depth_registered/image_rect" to="/camera/depth"/>
+    <remap from="/depth_registered/points" to="/camera/points"/>
+  </node>
+
+
+<node pkg="nodelet" type="nodelet" name="cropbox_realsense" args="load pcl/CropBox pc_manager" output="screen">
+  <remap from="~input" to="/camera/points" />
+  <remap from="~output" to="/camera/points_clean" />
+  <rosparam>
+    min_x: -30
+    max_x: 30
+    min_y: -30
+    max_y: 30
+    min_z: 0
+    max_z: 28.0
+  </rosparam>
+</node>
+
+</launch>

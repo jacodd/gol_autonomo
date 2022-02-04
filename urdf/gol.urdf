@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+<robot name="car">
+
+<link name="map">
+    <visual>
+      <geometry>
+        <box size =".001 .001 .001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+
+  <joint name="map_to_camera_init" type="fixed">
+    <parent link="map"/>
+    <child link="camera_init"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="camera_init">
+    <visual>
+      <geometry>
+        <cylinder length ="0.001" radius="0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+
+<joint name="map_to_aft" type="fixed">
+    <parent link="map"/>
+    <child link="aft_mapped"/>
+    <origin xyz="0 0 0"  rpy="0 0 0"/>
+  </joint>
+
+
+  <link name="aft_mapped">
+    <visual>
+      <geometry>
+        <box size =".001 .001 .001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+<joint name="aft_to_base_link" type="fixed">
+    <parent link="aft_mapped"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0"  rpy="0 0 0"/>
+  </joint>
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size =".001 .001 .001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+  <joint name="base_link_to_body" type="fixed">
+    <parent link="base_link"/>
+    <child link="body"/>
+    <origin rpy="0 0 0" xyz="0 0 0.5"/>
+  </joint>
+
+  <link name="body">
+    <visual>
+      <geometry>
+        <mesh filename="package://carro/urdf/mesh/chassi.dae"/>
+      </geometry>
+      <origin rpy="0 0 3.1416" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+  <joint name="body_to_right_rear_wheel" type="fixed">
+    <parent link="body"/>
+    <child link="right_rear_wheel"/>
+    <origin xyz="-1.6 -0.8 -0.65"/>
+  </joint>
+
+  <link name="right_rear_wheel">
+    <visual>
+      <geometry>
+        <mesh filename="package://carro/urdf/mesh/roda.dae"/>
+      </geometry>
+      <origin rpy="0 0 -1.57" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+  <joint name="body_to_left_rear_wheel" type="fixed">
+    <parent link="body"/>
+    <child link="left_rear_wheel"/>
+    <origin xyz="-1.6 0.8 -0.65"/>
+    <axis   xyz="0 1 0"/>
+  </joint>
+
+  <link name="left_rear_wheel">
+    <visual>
+      <geometry>
+        <mesh filename="package://carro/urdf/mesh/roda.dae"/>
+      </geometry>
+      <origin rpy="0 0 1.57" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+  <joint name="body_to_right_front_steering" type="fixed">
+    <parent link="body"/>
+    <child link="right_front_steering"/>
+    <origin xyz="1.4 -0.8 -0.65"/>
+  </joint>
+
+  <link name="right_front_steering">
+    <visual>
+      <geometry>
+        <box size =".001 .001 .001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+  <joint name="right_front_steering_to_right_front_wheel" type="revolute">
+    <parent link="right_front_steering"/>
+    <child link="right_front_wheel"/>
+    <origin xyz="0.0 0.0 0.0"/>
+    <axis   xyz="0 0 1"/>
+    <limit lower="-0.87" upper="0.87" effort="1000" velocity="1000"/>
+
+  </joint>
+
+  <link name="right_front_wheel">
+    <visual>
+      <geometry>
+        <mesh filename="package://carro/urdf/mesh/roda.dae"/>
+      </geometry>
+      <origin rpy="0 0 -1.57" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+  <joint name="body_to_left_front_steering" type="fixed">
+    <parent link="body"/>
+    <child link="left_front_steering"/>
+    <origin xyz="1.4 0.8 -0.65"/>
+  </joint>
+
+  <link name="left_front_steering">
+    <visual>
+      <geometry>
+        <box size =".001 .001 .001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+  <joint name="left_front_steering_to_left_front_wheel" type="revolute">
+    <parent link="left_front_steering"/>
+    <child link="left_front_wheel"/>
+    <origin xyz="0.0 0.0 0.0"/>
+    <axis   xyz="0 0 1"/>
+        <limit lower="-0.87" upper="0.87" effort="1000" velocity="1000"/>
+
+  </joint>
+
+  <link name="left_front_wheel">
+    <visual>
+      <geometry>
+        <mesh filename="package://carro/urdf/mesh/roda.dae"/>
+      </geometry>
+      <origin rpy="0 0 1.57" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+
+  <joint name="body_to_imu" type="fixed">
+    <parent link="body"/>
+    <child link="imu"/>
+    <origin xyz="0.5 0 0"/>
+  </joint>
+
+  <link name="imu">
+    <visual>
+      <geometry>
+        <box size =".01 .01 .01"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+  <joint name="body_to_lidar" type="fixed">
+    <parent link="body"/>
+    <child link="lidar"/>
+    <origin xyz=" -0.4 0 0.75" rpy="0 0 0"/>
+  </joint>
+
+  <link name="lidar">
+    <visual>
+      <geometry>
+        <cylinder length ="0.020" radius="0.039"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+
+    <joint name="lidar_to_camera" type="fixed">
+    <parent link="lidar"/>
+    <child link="camera"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="camera">
+    <visual>
+      <geometry>
+        <cylinder length ="0.001" radius="0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+   <joint name="lidar_to_velodyne" type="fixed">
+    <parent link="lidar"/>
+    <child link="velodyne"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="velodyne">
+    <visual>
+      <geometry>
+        <cylinder length ="0.001" radius="0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+  <joint name="body_to_realsense" type="fixed">
+    <parent link="body"/>
+    <child link="realsense"/>
+    <origin xyz="0.1 0 0.7" rpy="-1.57079 0 -1.57079"/>
+  </joint>
+
+  <link name="realsense">
+    <visual>
+      <geometry>
+        <box size ="0.15 0.05 0.015"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.0075 0.044 -0.016"/>
+    </visual>
+  </link>
+
+  <joint name="realsense_to_camera_depth_optical_frame" type="fixed">
+    <parent link="realsense"/>
+    <child link="camera_depth_optical_frame"/>
+    <origin xyz="0.15 0 0" rpy="0 0 0"/>
+  </joint>
+
+
+  <link name="camera_depth_optical_frame">
+    <visual>
+      <geometry>
+        <box size =".001 .001 .001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+    <joint name="body_to_GPS" type="fixed">
+    <parent link="body"/>
+    <child link="gps_link"/>
+    <origin rpy="0 0 0" xyz="0 0 0.1"/>
+  </joint>
+
+  <link name="gps_link">
+    <visual>
+      <geometry>
+          <box size =".001 .001 .001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+<joint name="body_to_ground_cam" type="fixed">
+    <parent link="body"/>
+    <child link="ground_cam"/>
+    <origin xyz="-2 0 -0.5" rpy="-3.1415 0 -1.57079"/>
+  </joint>
+
+  <link name="ground_cam">
+    <visual>
+      <geometry>
+        <box size ="0.15 0.05 0.015"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="-0.0075 0.044 -0.016"/>
+    </visual>
+  </link>
+
+</robot>
+
